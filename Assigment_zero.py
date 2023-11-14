@@ -126,5 +126,3 @@ if text_search:
     st.subheader(gold_words[sorted_cosine_sim[0][0]] )
     st.write("")
 
-from google.colab import drive
-drive.mount('/content/drive')
