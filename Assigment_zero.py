@@ -127,8 +127,6 @@ st.title("Search Based Retrieval Demo")
 st.subheader("Pass in an input word or even a sentence (e.g. jasmine or mount adams)")
 text_search = st.text_input("", value="")
 
-text_search = "flower"
-
 # Find closest word to an input word
 if text_search:
     input_embedding = averaged_glove_embeddings(text_search, glove_embeddings)
