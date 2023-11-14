@@ -8,10 +8,12 @@ Original file is located at
 """
 
 
+
 import streamlit as st
 import numpy as np
 import numpy.linalg as la
 import pickle
+from math import sqrt
 
 """
 This is a starter code for Assignment 0 of the course, "Hands-on Master Class on LLMs and ChatGPT | Autumn 2023"
@@ -25,13 +27,22 @@ Example webpage and search demo: searchdemo.streamlit.app
 
 # Compute Cosine Similarity
 def cosine_similarity(array_1,array_2):
-
+    sum = 0
+    sumx1 = 0
+    sumy1 = 0
     x_arr = np.array(array_1)
     y_arr = np.array(array_2)
 
-    cos = np.cos(x_arr, y_arr)
+    for i, j in zip(x_arr, y_arr):
+      sumx1 += i*i
+      sumy1 += j*j
+      sum += i*j
+    cosine_sim = sum / ((sqrt(sumx1)) * (sqrt(sumy1)))
 
-    return cos
+
+    #cos = np.cos(x_arr, y_arr)
+
+    return cosine_sim
 
 def create_pickle_fom_txt(txt_file = "sample_data/glove.6B.50d.txt"):
 
@@ -76,21 +87,32 @@ def averaged_glove_embeddings(sentence, embeddings_dict):
     glove_embedding = np.zeros(50)
     count_words = 0
 
-    #add all embeddings together and return sum
-
-    ############################
-    ### WRITE YOUR CODE HERE ###
-    ############################
-
-    """
     for word in words:
+      glove_embedding += embeddings_dict[word]
 
-    return
-    """
+    return glove_embedding / len(words)
 
 
-#create_pickle_fom_txt()
-#load_glove_embeddings()
+
+# if __name__ == "__main__":
+#     embeddings_dict = load_glove_embeddings()
+#     #print(embeddings_dict['dog'])
+
+#     embeddings1 = averaged_glove_embeddings(sentence = "me",embeddings_dict = embeddings_dict)
+#     embeddings2 = averaged_glove_embeddings(sentence = "i", embeddings_dict = embeddings_dict)
+
+#     embeddings3 = averaged_glove_embeddings(sentence = "me",embeddings_dict = embeddings_dict)
+#     embeddings4 = averaged_glove_embeddings(sentence = "myself", embeddings_dict = embeddings_dict)
+
+#     print(cosine_similarity(embeddings1 ,embeddings2))
+#     print(cosine_similarity(embeddings3 ,embeddings4))
+
+#     # print(embeddings_dict["flower"] + embeddings_dict["water"])
+#     # print((embeddings_dict["flower"] + embeddings_dict["water"]) / 2)
+
+
+#     flower_plant = cosine_similarity(embeddings_dict["flower"], embeddings_dict["plant"])
+#     flower_dog = cosine_similarity(embeddings_dict["flower"], embeddings_dict["dog"])
 
 if __name__ == "__main__":
     load_glove_embeddings()
@@ -105,6 +127,7 @@ st.title("Search Based Retrieval Demo")
 st.subheader("Pass in an input word or even a sentence (e.g. jasmine or mount adams)")
 text_search = st.text_input("", value="")
 
+text_search = "flower"
 
 # Find closest word to an input word
 if text_search:
@@ -113,16 +136,13 @@ if text_search:
     for index in range(len(gold_words)):
         cosine_sim[index] = cosine_similarity(input_embedding, glove_embeddings[gold_words[index]])
 
-    print(cosine_sim)
-    ############################
-    ### WRITE YOUR CODE HERE ###
-    ############################
 
     # Sort the cosine similarities
-    # sorted_cosine_sim =
+
+    sorted_cosine_sim = sorted(cosine_sim, key=cosine_sim.get, reverse=True)
+
 
     st.write("(My search uses glove embeddings)")
-    st.write("Closest word I have between flower, mountain, tree, car and building for your input is: ")
-    st.subheader(gold_words[sorted_cosine_sim[0][0]] )
+    st.write(f"Closest word I have between flower, mountain, tree, car and building for your input is: {gold_words[sorted_cosine_sim[0]]}")
+    st.subheader(gold_words[sorted_cosine_sim[0]])
     st.write("")
-
