@@ -88,7 +88,6 @@ def averaged_glove_embeddings(sentence, embeddings_dict):
     return
     """
 
-!python --version
 
 create_pickle_fom_txt()
 load_glove_embeddings()
