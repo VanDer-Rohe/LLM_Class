@@ -89,8 +89,8 @@ def averaged_glove_embeddings(sentence, embeddings_dict):
     """
 
 
-create_pickle_fom_txt()
-load_glove_embeddings()
+#create_pickle_fom_txt()
+#load_glove_embeddings()
 
 if __name__ == "__main__":
     load_glove_embeddings()
